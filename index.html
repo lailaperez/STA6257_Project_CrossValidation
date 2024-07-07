@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}</style>
 
 
 <script>/*!
@@ -3146,6 +3166,14 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>CV (Cross-Validation) is one of the most important methods for evaluating the performance and ability of a model to work in various domains, ranging from psychology to mobile health, software engineering, ecology, and climatology. CV involves dividing the data into training and testing portions, which strongly supports model validation to minimize overfitting. Song, Tang, and Wee show how to implement CV in the context of R and Shiny for psychological research and underscore the criticality of overfitting prevention, especially with small samples and high dimensions <span class="citation" data-cites="song2021making">(<a href="#ref-song2021making" role="doc-biblioref">Song, Tang, and Wee 2021</a>)</span>. Their study shows that repeated k-fold CV offers better results in sample sizes less than 500 and helps improve models’ generalizability and robustness <span class="citation" data-cites="song2021making">(<a href="#ref-song2021making" role="doc-biblioref">Song, Tang, and Wee 2021</a>)</span>.</p>
+<p>Negative binomial regression is compared with binary logistic regression by Yu in software engineering to model faults of Apache Ant modules <span class="citation" data-cites="yu2012using">(<a href="#ref-yu2012using" role="doc-biblioref">Yu 2012</a>)</span>. Although negative binomial regression is lacking in some ways, it is superior in predicting the number of bugs per module. Thus, it is important to select the right regression models and use CV to confirm the accuracy of the models. In the present work, Allgaier and Pryss specifically focus on CV techniques in mobile health research and discuss some train-test-split approaches, namely, stratified and nested k-fold CV <span class="citation" data-cites="allgaier2024practical">(<a href="#ref-allgaier2024practical" role="doc-biblioref">Allgaier and Pryss 2024</a>)</span>. They explain that covert populations may distort the outcomes and show that CV is useful in improving model accuracy and diminishing the impact of bias by appealing to analysts’ expertise <span class="citation" data-cites="allgaier2024practical">(<a href="#ref-allgaier2024practical" role="doc-biblioref">Allgaier and Pryss 2024</a>)</span>.</p>
+<p>Depending on the research, data, and field of study, researchers may prefer different methodologies. In the book by Gareth James, “An Introduction to Statistical Learning”, three kinds of CV are discussed: the Validation Set Approach, Leave-One-Out, and k-fold <span class="citation" data-cites="james2013introduction">(<a href="#ref-james2013introduction" role="doc-biblioref">James et al. 2013</a>)</span>. After discussing these methods, the author concludes that k-fold (where k=5 or 10) is the preferred method because the required computations are not very high, and it doesn’t show excessive bias or high variance <span class="citation" data-cites="james2013introduction">(<a href="#ref-james2013introduction" role="doc-biblioref">James et al. 2013</a>)</span>. These results were similar to those from the study by Wong and Yeh, who tested the accuracy estimates of k-folds with increasing k values to k=1 <span class="citation" data-cites="wong2019reliable">(<a href="#ref-wong2019reliable" role="doc-biblioref">Wong and Yeh 2019</a>)</span>. They tested the methods against 20 different datasets and noted the correlation between the number of folds and the accuracy of the model. They ultimately concluded that using a larger number of folds with fewer repetitions is recommended for evaluating classification algorithms to get more reliable accuracy estimates <span class="citation" data-cites="wong2019reliable">(<a href="#ref-wong2019reliable" role="doc-biblioref">Wong and Yeh 2019</a>)</span>.</p>
+<p>In Bischl’s article studying resampling methods, he concludes that LOO (Leave-One-Out) has too high a variance and chooses overly complex methods <span class="citation" data-cites="bischl2012resampling">(<a href="#ref-bischl2012resampling" role="doc-biblioref">Bischl et al. 2012</a>)</span>. Yates et al. provide an overview of CV methods in ecological modeling; they recommend using LOO and SDS (Stratified Double Sampling) due to their efficiency in reducing bias and overfitting of the data <span class="citation" data-cites="yates2023cross">(<a href="#ref-yates2023cross" role="doc-biblioref">Yates et al. 2023</a>)</span>. They also stress the aspects of model selection according to the study’s aim: hypothesis testing, prediction, and causality, which provides useful information about the use of CV in ecological research <span class="citation" data-cites="yates2023cross">(<a href="#ref-yates2023cross" role="doc-biblioref">Yates et al. 2023</a>)</span>. Vanwinckelen and Blockeel discuss the use of repeated CV concerning the evaluation of model accuracy <span class="citation" data-cites="vanwinckelen2012estimating">(<a href="#ref-vanwinckelen2012estimating" role="doc-biblioref">Vanwinckelen and Blockeel 2012</a>)</span>. They provide evidence that shows CV has a pessimistic bias, which increases with the number of CV repetitions <span class="citation" data-cites="vanwinckelen2012estimating">(<a href="#ref-vanwinckelen2012estimating" role="doc-biblioref">Vanwinckelen and Blockeel 2012</a>)</span>.</p>
+<p>Hawkins, Basak, and Mills discuss the Validation Set Approach and compare it with CV in the development of QSAR models <span class="citation" data-cites="hawkins2003assessing">(<a href="#ref-hawkins2003assessing" role="doc-biblioref">Hawkins, Basak, and Mills 2003</a>)</span>. They provide evidence that CV offers more accurate performance estimates compared to the Validation Set Approach, especially with small samples – a crucial aspect in developing good and accurate QSAR models in chemical and pharmaceutical research <span class="citation" data-cites="hawkins2003assessing">(<a href="#ref-hawkins2003assessing" role="doc-biblioref">Hawkins, Basak, and Mills 2003</a>)</span>. Mnich et al. (2020) delve into the application of repeated CV in super learning to lower high variance and provide better performance estimates, increasing predictive capacity and decreasing computation time.</p>
+<p>According to Yates, there are four goals when selecting a model: exploration, hypothesis testing, prediction, and causal inference <span class="citation" data-cites="yates2023cross">(<a href="#ref-yates2023cross" role="doc-biblioref">Yates et al. 2023</a>)</span>. While a researcher may prefer one method to meet all four goals, these goals are often mutually exclusive. It is up to the researcher to determine which goal is most important and which method best meets those goals. Tougui et al. (2021) explore the effect of different CV strategies on the performance of diagnostic applications derived using machine learning. They found that while record-wise CV tends to provide optimistic estimates of classifiers’ performance, subject-wise CV gives ‘real-world’ measures of performance. This is further substantiated by the fact that climate and weather prediction models also employ cross-validations, reflecting the appropriateness and flexibility of these techniques. Effective models and forecasts regarding weather help shape climate policy in this field.</p>
+<p>When choosing the method, it is important to note the limitations of the method, the data, and the computation time. Browne points out that splitting the data limits the number of observations and notes that accuracy depends on the index of the predictors and the sample size <span class="citation" data-cites="browne2000cross">(<a href="#ref-browne2000cross" role="doc-biblioref">Browne 2000</a>)</span>. One of the biggest dangers in machine learning is overfitting, where the model created from the training data is a great predictor of the training data but overestimates the results for data not found in the training and test data. In the research by Allgaier, they found that the predictions were skewed due to hidden groups in the data <span class="citation" data-cites="allgaier2024practical">(<a href="#ref-allgaier2024practical" role="doc-biblioref">Allgaier and Pryss 2024</a>)</span>. These groups were not recognizable by machine learning and required a health field expert to identify that people who made multiple entries had more effect on the prediction than those who made fewer entries. Once they recognized the error, they switched to stratified cross-validation to mitigate the effects <span class="citation" data-cites="allgaier2024practical">(<a href="#ref-allgaier2024practical" role="doc-biblioref">Allgaier and Pryss 2024</a>)</span>.</p>
+<p>Other methods have been developed to address overfitting. The method of Cross Validation with Confidence (CVC) was proposed in an article by Jing Lei <span class="citation" data-cites="lei2020cross">(<a href="#ref-lei2020cross" role="doc-biblioref">Lei 2020</a>)</span>. The goal is to test each model against the null hypothesis that it is the best model, providing a p-value for each model based on cross-validation residuals and a Gaussian multiplier bootstrap approach <span class="citation" data-cites="lei2020cross">(<a href="#ref-lei2020cross" role="doc-biblioref">Lei 2020</a>)</span>. This method balances prediction accuracy and model interpretability but increases computational complexity by adding p-values <span class="citation" data-cites="lei2020cross">(<a href="#ref-lei2020cross" role="doc-biblioref">Lei 2020</a>)</span>. Filzmoser et al. proposed repeated double cross-validation (rdCV), involving partial least squares regression and repeated double cross-validation <span class="citation" data-cites="filzmoser2009repeated">(<a href="#ref-filzmoser2009repeated" role="doc-biblioref">Filzmoser, Liebmann, and Varmuza 2009</a>)</span>. It splits the dataset multiple times to check performance. The limitations of this method are its computational intensity for large datasets and the possibility of different results in some cases due to random data splits <span class="citation" data-cites="filzmoser2009repeated">(<a href="#ref-filzmoser2009repeated" role="doc-biblioref">Filzmoser, Liebmann, and Varmuza 2009</a>)</span>.</p>
 <section id="laila-summaries" class="level3">
 <h3 class="anchored" data-anchor-id="laila-summaries">Laila summaries</h3>
 <p><u>Summary of “Cross-Validation Methods” by Michael Browne</u></p>
@@ -3256,7 +3284,7 @@ Application: In climate models, k-fold cross-validation helps in evaluating how 
 <p>Limitations: According to the author repeated CV is recommend to reduce variance. Other CV studies have concluded that variance is greatly reduced when using the 10-fold CV, when compared to the Leave-One-Out CV method. This experiment was done using the 10-fold CV method. I wounder if this experiment were done using LOOCV if the results/conclusions would be the same/similar.</p>
 <p>If I used Repetitive CV to estimate model error, I would not use the mean CV value, I would use the max CV error estimate.</p>
 <p>Data that was used: Frank, A. and Asuncion, A. (2010) UCI Machine Learning Repository. University of California, School of Information and Computer Science. Irvine. http://archive.ics.uci.edu/ ml</p>
-<p>Atrical-2 <a href="https://pubs.acs.org/doi/pdf/10.1021/ci025626i?casa_token=iSpUkNhlfsMAAAAA:nzsLXNNwrbIqqpp4fR5o8nYDSRt2Jr7SCMFXFA-n0lsb7G55C3jlDrTEIeJG89MYjxlQ-nmz2Z7ScepT">Assessing Model Fit by Cross-Validation</a> <span class="citation" data-cites="hawkins2003assessing">(<a href="#ref-hawkins2003assessing" role="doc-biblioref"><strong>hawkins2003assessing?</strong></a>)</span></p>
+<p>Atrical-2 <a href="https://pubs.acs.org/doi/pdf/10.1021/ci025626i?casa_token=iSpUkNhlfsMAAAAA:nzsLXNNwrbIqqpp4fR5o8nYDSRt2Jr7SCMFXFA-n0lsb7G55C3jlDrTEIeJG89MYjxlQ-nmz2Z7ScepT">Assessing Model Fit by Cross-Validation</a> <span class="citation" data-cites="hawkins2003assessing">(<a href="#ref-hawkins2003assessing" role="doc-biblioref">Hawkins, Basak, and Mills 2003</a>)</span></p>
 <p>Goal: Provide evidence that, when the sample is small (“dozens or scores rather than the hundreds”), it is better to construct a QSAR model with all available data and use Cross-validation to estimate model error. Verses constructing a QSAR model with a portion of the available data (training set) and using the remaining portion of the data (test set) to evaluate model performance. The authors refer to the later method as “sample splitting”.</p>
 <p>methods: Data cleaning predictors were removing if they:</p>
 <ul>
@@ -3361,11 +3389,49 @@ CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} MSEi
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
 </section>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level2 unnumbered">
+
+
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-allgaier2024practical" class="csl-entry" role="listitem">
+Allgaier, Johannes, and Rüdiger Pryss. 2024. <span>“Practical Approaches in Evaluating Validation and Biases of Machine Learning Applied to Mobile Health Studies.”</span> <em>Communications Medicine</em> 4 (1): 76.
+</div>
+<div id="ref-bischl2012resampling" class="csl-entry" role="listitem">
+Bischl, Bernd, Olaf Mersmann, Heike Trautmann, and Claus Weihs. 2012. <span>“Resampling Methods for Meta-Model Validation with Recommendations for Evolutionary Computation.”</span> <em>Evolutionary Computation</em> 20 (2): 249–75.
+</div>
+<div id="ref-browne2000cross" class="csl-entry" role="listitem">
+Browne, Michael W. 2000. <span>“Cross-Validation Methods.”</span> <em>Journal of Mathematical Psychology</em> 44 (1): 108–32.
+</div>
+<div id="ref-filzmoser2009repeated" class="csl-entry" role="listitem">
+Filzmoser, Peter, Bettina Liebmann, and Kurt Varmuza. 2009. <span>“Repeated Double Cross Validation.”</span> <em>Journal of Chemometrics: A Journal of the Chemometrics Society</em> 23 (4): 160–71.
+</div>
+<div id="ref-hawkins2003assessing" class="csl-entry" role="listitem">
+Hawkins, Douglas M, Subhash C Basak, and Denise Mills. 2003. <span>“Assessing Model Fit by Cross-Validation.”</span> <em>Journal of Chemical Information and Computer Sciences</em> 43 (2): 579–86.
+</div>
+<div id="ref-james2013introduction" class="csl-entry" role="listitem">
+James, Gareth, Daniela Witten, Trevor Hastie, Robert Tibshirani, et al. 2013. <em>An Introduction to Statistical Learning</em>. Vol. 112. Springer.
+</div>
+<div id="ref-lei2020cross" class="csl-entry" role="listitem">
+Lei, Jing. 2020. <span>“Cross-Validation with Confidence.”</span> <em>Journal of the American Statistical Association</em> 115 (532): 1978–97.
+</div>
+<div id="ref-song2021making" class="csl-entry" role="listitem">
+Song, Q Chelsea, Chen Tang, and Serena Wee. 2021. <span>“Making Sense of Model Generalizability: A Tutorial on Cross-Validation in r and Shiny.”</span> <em>Advances in Methods and Practices in Psychological Science</em> 4 (1): 2515245920947067.
+</div>
+<div id="ref-vanwinckelen2012estimating" class="csl-entry" role="listitem">
+Vanwinckelen, Gitte, and Hendrik Blockeel. 2012. <span>“On Estimating Model Accuracy with Repeated Cross-Validation.”</span> In <em>BeneLearn 2012: Proceedings of the 21st Belgian-Dutch Conference on Machine Learning</em>, 39–44.
+</div>
+<div id="ref-wong2019reliable" class="csl-entry" role="listitem">
+Wong, Tzu-Tsung, and Po-Yang Yeh. 2019. <span>“Reliable Accuracy Estimates from k-Fold Cross Validation.”</span> <em>IEEE Transactions on Knowledge and Data Engineering</em> 32 (8): 1586–94.
+</div>
+<div id="ref-yates2023cross" class="csl-entry" role="listitem">
+Yates, Luke A, Zach Aandahl, Shane A Richards, and Barry W Brook. 2023. <span>“Cross Validation for Model Selection: A Review with Examples from Ecology.”</span> <em>Ecological Monographs</em> 93 (1): e1557.
+</div>
+<div id="ref-yu2012using" class="csl-entry" role="listitem">
+Yu, Liguo. 2012. <span>“Using Negative Binomial Regression Analysis to Predict Software Faults: A Study of Apache Ant.”</span>
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

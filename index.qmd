@@ -27,9 +27,9 @@ Depending on the research, data, and field of study, researchers may prefer diff
 
 In Bischl’s article studying resampling methods, he concludes that LOO (Leave-One-Out) has too high a variance and chooses overly complex methods [@bischl2012resampling]. Yates et al. provide an overview of CV methods in ecological modeling; they recommend using LOO and SDS (Stratified Double Sampling) due to their efficiency in reducing bias and overfitting of the data [@yates2023cross]. They also stress the aspects of model selection according to the study's aim: hypothesis testing, prediction, and causality, which provides useful information about the use of CV in ecological research [@yates2023cross]. Vanwinckelen and Blockeel discuss the use of repeated CV concerning the evaluation of model accuracy [@vanwinckelen2012estimating]. They provide evidence that shows CV has a pessimistic bias, which increases with the number of CV repetitions [@vanwinckelen2012estimating].
 
-Hawkins, Basak, and Mills discuss the Validation Set Approach and compare it with CV in the development of QSAR models [@hawkins2003assessing]. They provide evidence that CV offers more accurate performance estimates compared to the Validation Set Approach, especially with small samples – a crucial aspect in developing good and accurate QSAR models in chemical and pharmaceutical research [@hawkins2003assessing]. Mnich et al. (2020) delve into the application of repeated CV in super learning to lower high variance and provide better performance estimates, increasing predictive capacity and decreasing computation time.
+Hawkins, Basak, and Mills discuss the Validation Set Approach and compare it with CV in the development of QSAR models [@hawkins2003assessing]. They provide evidence that CV offers more accurate performance estimates compared to the Validation Set Approach, especially with small samples – a crucial aspect in developing good and accurate QSAR models in chemical and pharmaceutical research [@hawkins2003assessing]. Mnich et al. delve into the application of repeated CV in super learning to lower high variance and provide better performance estimates, increasing predictive capacity and decreasing computation time [@mnich2020super].
 
-According to Yates, there are four goals when selecting a model: exploration, hypothesis testing, prediction, and causal inference [@yates2023cross]. While a researcher may prefer one method to meet all four goals, these goals are often mutually exclusive. It is up to the researcher to determine which goal is most important and which method best meets those goals. Tougui et al. (2021) explore the effect of different CV strategies on the performance of diagnostic applications derived using machine learning. They found that while record-wise CV tends to provide optimistic estimates of classifiers' performance, subject-wise CV gives 'real-world' measures of performance. This is further substantiated by the fact that climate and weather prediction models also employ cross-validations, reflecting the appropriateness and flexibility of these techniques. Effective models and forecasts regarding weather help shape climate policy in this field.
+According to Yates, there are four goals when selecting a model: exploration, hypothesis testing, prediction, and causal inference [@yates2023cross]. While a researcher may prefer one method to meet all four goals, these goals are often mutually exclusive. It is up to the researcher to determine which goal is most important and which method best meets those goals. Tougui et al. explore the effect of different CV strategies on the performance of diagnostic applications derived using machine learning [@tougui2021impact]. They found that while record-wise CV tends to provide optimistic estimates of classifiers' performance, subject-wise CV gives 'real-world' measures of performance. This is further substantiated by the fact that climate and weather prediction models also employ cross-validations, reflecting the appropriateness and flexibility of these techniques. Effective models and forecasts regarding weather help shape climate policy in this field.
 
 When choosing the method, it is important to note the limitations of the method, the data, and the computation time. Browne points out that splitting the data limits the number of observations and notes that accuracy depends on the index of the predictors and the sample size [@browne2000cross]. One of the biggest dangers in machine learning is overfitting, where the model created from the training data is a great predictor of the training data but overestimates the results for data not found in the training and test data. In the research by Allgaier, they found that the predictions were skewed due to hidden groups in the data [@allgaier2024practical]. These groups were not recognizable by machine learning and required a health field expert to identify that people who made multiple entries had more effect on the prediction than those who made fewer entries. Once they recognized the error, they switched to stratified cross-validation to mitigate the effects [@allgaier2024practical].
 
@@ -623,7 +623,73 @@ library(ggrepel)
 library(dslabs)
 ```
 
+
+### Data and Visualization
+
+concrete data [@misc_concrete_compressive_strength_165]
+
+| Name                          | Data Type    | Measurement  | Variable     |
+|:----------------------------- |:-------------|:-------------|:----------------|
+| Concrete compressive strength | Quantitative | MPa          | Response  |
+| Cement              | Quantitative | kg in a m3 mixture | Predictor |
+| Blast Furnace Slag  | Quantitative | kg in a m3 mixture | Predictor |
+| Fly Ash             | Quantitative | kg in a m3 mixture | Predictor |
+| Water               | Quantitative | kg in a m3 mixture | Predictor |
+| Superplasticizer    | Quantitative | kg in a m3 mixture | Predictor |
+| Coarse Aggregate    | Quantitative | kg in a m3 mixture | Predictor |
+| Fine Aggregate      | Quantitative | kg in a m3 mixture | Predictor |
+| Age                 | Quantitative | Day (1~365)        | Predictor |
+
+: **Variables** {.striped .hover}
+
+### Extract transform and Load Data
+
+```{r, warning=FALSE, echo=TRUE}
+library(dplyr)
+library(readxl)
+
+# Load Data
+concrete <- read_excel("Concrete_Data.xls") %>%
+  rename(cement = 1,
+         furnac_slag = 2,
+         fly_ash = 3,
+         water = 4,
+         superplasticizer = 5,
+         coarse_aggregate = 6,
+         fine_aggregate = 7,
+         age = 8,
+         compressive_strength = 9 ) %>%
+  relocate(compressive_strength)
+
 ```
+
+### Data Plots
+
+```{r}
+library(ggplot2)
+library(stringr)
+library(tidyr)
+
+pivot_longer(data = concrete, 1:9, names_to = "grp") %>% 
+  mutate(grp = str_to_title(str_replace(grp, "_"," "))) %>%
+  ggplot(aes(x=factor(0), y = value)) +
+  geom_boxplot(color="blue", outlier.color="red") +
+  xlab("Predictor") + ylab("") +
+  theme(axis.text.x = element_blank()) +
+  facet_wrap(~grp, scales = "free", ncol = 3) +
+  theme(strip.text = element_text(face = "bold"))
+
+pivot_longer(data = concrete, 2:9, names_to = "grp") %>% 
+  mutate(grp = str_to_title(str_replace(grp, "_"," "))) %>%
+  ggplot(aes(x = value, y = compressive_strength)) +
+  geom_point() +
+  facet_wrap(~grp, scales = "free", ncol = 3) +
+  xlab("Predictor") + 
+  ylab("Compressive Strength") +
+  theme(strip.text = element_text(face = "bold")) +
+  geom_smooth(formula = y ~ x, method = lm, se = FALSE)
+```
+
 
 ### Statistical Modeling
 

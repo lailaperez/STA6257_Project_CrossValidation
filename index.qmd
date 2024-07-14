@@ -39,6 +39,80 @@ Other methods have been developed to address overfitting. The method of Cross Va
 
 ## Methods
 
+### Model Measures of Error
+
+Measuring the quality of fit of a regression model is an important step in data modeling. There are several commonly used metrics that quantify how well a model explains the data. By measuring the quality of fit we can select the model that makes the most accurate predictions on unseen data. Common metrics used to measure model performance are:
+
+- **Mean Absolute Error (MAE)**\
+\
+The Mean Absolute Error is a measure error <u>magnitude</u>. The sine of the error does not matter because MAE uses the absolute value. Small MAE values, "<i>lower magnitude</i>" indicate better model fit. MAE is calculated (1) by averaging the absolute difference between the observed $(y_i)$ and predicted $\hat{f}(x_i)$ values. Where:\
+\
+  - $n$ is the number of observations,
+  - $\hat{f}(x_i)$ is the prediction that the regression function $\hat{f}$ gives for the ith observation,
+  - $y_i$ is the observed value.
+  
+$$
+ \text{MAE} 
+ = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{f}(x_i)|  
+ \tag{1}
+$$
+\
+
+- **Root Mean Squared Error (RMSE)**\
+\
+The Root Mean Squared Error (2) is a measure of error <u>magnitude</u> also. Like MAE, smaller RMSE values indicate better model fit.
+In this method the square error $(y_i - \hat{f}(x_i))^2$  values are used. Squaring the error give more weight to the larger ones. In contrast with the MAE that uses the absolute error $|y_i - \hat{f}(x_i)|$ values, all errors are weighted equally regardless of size. Taking the square root returns the error to the same units as the response variable, making it easier to interpret.\
+
+$$
+\text{RMSE} 
+= \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{f}(x_i))^2}
+\tag{2}
+$$
+
+\
+
+- **R-squared ($R^2$)**\
+\
+R-squared is the proportion, <i>percent</i> of the variance in the response variable that is explained by the predictor variable(s). Unlike MAR and RMSE, $R^2$ values range from 0 to 1 and the higher the value, the better the fit. An $R^2$ value of 0.75 indicates that 75% of the variance in the response variable can be explained by the predictor variable(s). The $R^2$ equation (3) is composed of two key parts, the Total Sum of Squares ($SS_{tot}$) and the Residual Sum of Squares ($SS_{res}$).
+
+$$
+\text{R}^2 
+= \frac{SS_{tot}-SS_{res}}{SS_{tot}} 
+= 1 - \frac{SS_{res}}{SS_{tot}}
+= 1 - \frac{\sum_{i=1}^{n}(y_i - \hat{f}(x_i))^2}{\sum_{i=1}^{n}(y_i-\bar{f}(x_i))^2}
+ \tag{3}
+$$ 
+
+
+  [@james2013introduction]
+ 
+### Leave One Out Cross-validations (LOOCV)
+
+A specific case of K-Fold Cross-Validation, where k is the number of data points in the dataset, is Leave-One-Out Cross-Validation (LOOCV). With this approach, the model is trained N times, with the remaining N−1 observations being used for training and one observation being left out as the test set each time. Even with its high computing cost, LOOCV offers an objective assessment of the model's efficacy. Lei talks about how LOOCV is good at giving a thorough evaluation of model performance, particularly for small datasets [@lei2020cross]. However, as Browne points out, a drawback may be the huge variance in error estimation brought on by the frequent usage of almost identical training sets [@browne2000cross].
+
+![Leave One Out CV](LOOCV_fig.webp){#fig-LOOCV}
+
+$$
+CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \text{Measuer of Errori}_i \tag{4}
+$$
+
+### k-Fold Cross-Validation
+
+K-Fold Cross-Validation is a widely used technique for assessing the performance of a predictive model. The dataset is divided using this method into k roughly equal-sized folds. After k−1folds of training, the model is tested on the last fold. Every fold is used as the test set once, and this process is repeated k times. Next, an average of the outcomes is obtained to generate a single performance estimate. Wong and Yeh state that this approach is a strong option for model validation since it yields accurate estimates and is particularly useful for smaller datasets for which separate training and testing sets are impractical [@wong2019reliable]. Additionally, Browne highlights the significance of K-Fold CV in empirical model evaluation and elaborates on the flexibility and adaptability of the model in handling various data distributions and sizes [@browne2000cross]. 
+
+![5-fold CV](CV5Fold_fig.webp){#fig-kfold}
+
+$$
+CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} \text{Measuer of Errori}_i \tag{5}
+$$
+
+### Nested Cross-Validation
+
+Nested Cross-Validation is especially helpful when choosing a model and adjusting hyperparameters. Two stages of cross-validation are used in this technique: an inner loop that optimizes hyperparameters and an outside loop that assesses the model's performance. Nested cross-validation offers a more objective estimation of the model's capacity for generalization by isolating the hyperparameter tweaking procedure from the performance assessment. According to Filzmoser and his colleagues, nested cross-validation is useful for generating precise performance estimates without causing overfitting, which can happen when hyperparameters are adjusted using the same data that is used for model evaluation [@filzmoser2009repeated]. This technique is particularly important in complicated modeling situations when the model's prediction performance is greatly impacted by parameter adjustment.
+
+![Nested CV](NestCV_fig.webp){#fig-NestCV}
+
+
 ##### Square Error
 
 $$

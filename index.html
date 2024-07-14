@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Laila Perez, Sai Devarashetty, Andrew Mattick, Curtis Musson">
-<meta name="dcterms.date" content="2024-07-09">
+<meta name="dcterms.date" content="2024-07-14">
 
 <title>Cross-Validation Capstone Project</title>
 <style>
@@ -3152,7 +3152,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 9, 2024</p>
+      <p class="date">July 14, 2024</p>
     </div>
   </div>
   
@@ -3177,6 +3177,101 @@ window.Quarto = {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="model-measures-of-error" class="level3">
+<h3 class="anchored" data-anchor-id="model-measures-of-error">Model Measures of Error</h3>
+<p>Measuring the quality of fit of a regression model is an important step in data modeling. There are several commonly used metrics that quantify how well a model explains the data. By measuring the quality of fit we can select the model that makes the most accurate predictions on unseen data. Common metrics used to measure model performance are:</p>
+<ul>
+<li><strong>Mean Absolute Error (MAE)</strong><br>
+<br>
+The Mean Absolute Error is a measure error <u>magnitude</u>. The sine of the error does not matter because MAE uses the absolute value. Small MAE values, “<i>lower magnitude</i>” indicate better model fit. MAE is calculated (1) by averaging the absolute difference between the observed <span class="math inline">\((y_i)\)</span> and predicted <span class="math inline">\(\hat{f}(x_i)\)</span> values. Where:<br>
+<br>
+
+<ul>
+<li><span class="math inline">\(n\)</span> is the number of observations,</li>
+<li><span class="math inline">\(\hat{f}(x_i)\)</span> is the prediction that the regression function <span class="math inline">\(\hat{f}\)</span> gives for the ith observation,</li>
+<li><span class="math inline">\(y_i\)</span> is the observed value.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\text{MAE}
+= \frac{1}{n} \sum_{i=1}^n |y_i - \hat{f}(x_i)|  
+\tag{1}
+\]</span><br>
+</p>
+<ul>
+<li><strong>Root Mean Squared Error (RMSE)</strong><br>
+<br>
+The Root Mean Squared Error (2) is a measure of error <u>magnitude</u> also. Like MAE, smaller RMSE values indicate better model fit. In this method the square error <span class="math inline">\((y_i - \hat{f}(x_i))^2\)</span> values are used. Squaring the error give more weight to the larger ones. In contrast with the MAE that uses the absolute error <span class="math inline">\(|y_i - \hat{f}(x_i)|\)</span> values, all errors are weighted equally regardless of size. Taking the square root returns the error to the same units as the response variable, making it easier to interpret.<br>
+</li>
+</ul>
+<p><span class="math display">\[
+\text{RMSE}
+= \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{f}(x_i))^2}
+\tag{2}
+\]</span></p>
+<p><br>
+</p>
+<ul>
+<li><strong>R-squared (<span class="math inline">\(R^2\)</span>)</strong><br>
+<br>
+R-squared is the proportion, <i>percent</i> of the variance in the response variable that is explained by the predictor variable(s). Unlike MAR and RMSE, <span class="math inline">\(R^2\)</span> values range from 0 to 1 and the higher the value, the better the fit. An <span class="math inline">\(R^2\)</span> value of 0.75 indicates that 75% of the variance in the response variable can be explained by the predictor variable(s). The <span class="math inline">\(R^2\)</span> equation (3) is composed of two key parts, the Total Sum of Squares (<span class="math inline">\(SS_{tot}\)</span>) and the Residual Sum of Squares (<span class="math inline">\(SS_{res}\)</span>).</li>
+</ul>
+<p><span class="math display">\[
+\text{R}^2
+= \frac{SS_{tot}-SS_{res}}{SS_{tot}}
+= 1 - \frac{SS_{res}}{SS_{tot}}
+= 1 - \frac{\sum_{i=1}^{n}(y_i - \hat{f}(x_i))^2}{\sum_{i=1}^{n}(y_i-\bar{f}(x_i))^2}
+\tag{3}
+\]</span></p>
+<p><span class="citation" data-cites="james2013introduction">(<a href="#ref-james2013introduction" role="doc-biblioref">James et al. 2013</a>)</span></p>
+</section>
+<section id="leave-one-out-cross-validations-loocv" class="level3">
+<h3 class="anchored" data-anchor-id="leave-one-out-cross-validations-loocv">Leave One Out Cross-validations (LOOCV)</h3>
+<p>A specific case of K-Fold Cross-Validation, where k is the number of data points in the dataset, is Leave-One-Out Cross-Validation (LOOCV). With this approach, the model is trained N times, with the remaining N−1 observations being used for training and one observation being left out as the test set each time. Even with its high computing cost, LOOCV offers an objective assessment of the model’s efficacy. Lei talks about how LOOCV is good at giving a thorough evaluation of model performance, particularly for small datasets <span class="citation" data-cites="lei2020cross">(<a href="#ref-lei2020cross" role="doc-biblioref">Lei 2020</a>)</span>. However, as Browne points out, a drawback may be the huge variance in error estimation brought on by the frequent usage of almost identical training sets <span class="citation" data-cites="browne2000cross">(<a href="#ref-browne2000cross" role="doc-biblioref">Browne 2000</a>)</span>.</p>
+<div id="fig-LOOCV" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-LOOCV-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data:image/webp;base64,UklGRt4DAABXRUJQVlA4TNIDAAAvE4IyAI/iNrZtpdq4Q0rmNEANtEBVRDTGt8glc3dvw3Vs20qzcacAvh1qoG06kCQtuLu7x41t22py4u4JbpUzCkomwGitZQYOFZ1TRuc/gP9/RRAaIAAhcEFP/w/4g585Px/mrLriHwQE0NYt0AZNTMAY8xEmQxxXI7vTzsdd60mB5yPzfhY+n9zt8/Z5iH6/EnLqf7c9hSd7URCY0ZkJ+fqyV/zvrp2Qt3YdW38rrmQvQInF/eAIpBXIMZNwB0IfzR2swAqcgDvGaQC3p7QssiwT5IKqqgzDkJsPQYrReyFsr2Qp0hAEwL+AsxEnlTBEsXQESVBXZwVLiUG6tu1p23zhcutwxyszQ5iZc/5nkznfJ2m/Xl2pHNF/V5AkK82cPCQC8Vyx2Gfoy4eRTTAOi/Cp5Opk9BHvS1wTTVSmBGrGlVuR3WxoGu2JU3Id7WHdc+1L0gDqilMyjffRZDf+SOcDPXRfecNXArTdpe640NVCrZVHd+Ek2jPLuJBdTbrCtGDP6GMiD+2incYFIsqKf3iJJuJgyoYwTXaiVubSxFIsG7xxabW/rNVsAdUFMbY4Dvwn8J+ANDp++87zY21igPdvv5b/jMc3Ib/r0Hc2fpKS/VkF+K4a8LtaWABXCSvgclgCl8IaOB8WwbmwCr4elsF9YRuseXLSDIXsgzc3R/exwYPdOBKyBW2w/RHZl7gnuliDnRKo2SndidzkvJdI2g8zJfeRNNY9cyZxLz7KiJP7EkuhyU3smc6SJlB/5R29E6DtDWX2ihkTCK08OgMnkbRZ9oo5j4GbFuw5/LyQh2bQTjsFIsrz3NPKLsTBlPMwTXaifurSxFIsG+zWNE/BgP8HpIVKpSTYgsPPWEpiTnSpolKEmr3yg8hVPjELt0WV4n0kjXXPPZ/WBlDLr0jDV5NolFlk3w++mkQTyG2CwNUkmmWnkE/I7BVz2LP9cZmQuM+gnfaKRJTjmROt3xThq0m0E/VTlyamlw0OyNAkAv8PSAszlRJHJnBrEj1WgaihUoRbk+jx2ysUVYrzcBvrnvtYSkmcpK5Ig1uT6PGqVJ6tN1q1foDWJCq1YppTyw/a+jNBfyizU8ijDre9Qol5i0twaxI9fnuF4mDKJzBNdqJ+6tLEUiwbvJlpo49431LgyrbA/1rZ14RaWeB/rSzwv1bmwW5K55oPXP7XOhQdmRjb1q3KlECL3rZudY+RE9kevW3d6h4jJ5pcRZ7o9MAEusfICSfU2im0TKB7jJxwEm4bQvcYOVFH9xg5kUVvW7e6x8iJabIT9VNnJWrn/tmZaSE=" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-LOOCV-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 1: Leave One Out CV
+</figcaption>
+</figure>
+</div>
+<p><span class="math display">\[
+CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \text{Measuer of Errori}_i \tag{4}
+\]</span></p>
+</section>
+<section id="k-fold-cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="k-fold-cross-validation">k-Fold Cross-Validation</h3>
+<p>K-Fold Cross-Validation is a widely used technique for assessing the performance of a predictive model. The dataset is divided using this method into k roughly equal-sized folds. After k−1folds of training, the model is tested on the last fold. Every fold is used as the test set once, and this process is repeated k times. Next, an average of the outcomes is obtained to generate a single performance estimate. Wong and Yeh state that this approach is a strong option for model validation since it yields accurate estimates and is particularly useful for smaller datasets for which separate training and testing sets are impractical <span class="citation" data-cites="wong2019reliable">(<a href="#ref-wong2019reliable" role="doc-biblioref">Wong and Yeh 2019</a>)</span>. Additionally, Browne highlights the significance of K-Fold CV in empirical model evaluation and elaborates on the flexibility and adaptability of the model in handling various data distributions and sizes <span class="citation" data-cites="browne2000cross">(<a href="#ref-browne2000cross" role="doc-biblioref">Browne 2000</a>)</span>.</p>
+<div id="fig-kfold" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kfold-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data:image/webp;base64,UklGRgYFAABXRUJQVlA4TPoEAAAvEkI5AI/iNrZtpdq4Q0rmNEANtEBVRDTGt8glc3dvw3Uk20o0uBMA3w75k4FuCu7u7uvGtm01OXH3BLfKGQUlE2C01jIDh4rOKaPzH8D/vyIIDRCAELigp/8H/MHPnJ8Pc1ZV8Q8CAmjrFmiDJiZgjPkIkyGOq5HdaefjrvWkwPOReT8Ln0/u9nn7PES/Xwk59b/bnsKTvSgIzOjMhHx92Sv+d9dOyFu7jq2/FVeyF6DA4n5wiTCTcAdCH80drMAKnIBbBwFOgAHcntKyyLJMkAuqqjIMQ24+BClG74WwvZKlSEMQAP8CzkacVMIQ+dIRJEFdnRUsJQaJ1ranbfOFmXG8FUJb2UlxWOb2/q9mtvzLIUm/dqZE9F8S20iOJKnMbvtYv10onelnbEVHgU0oBBbhm5J7kzsvfS1jCDxEScJp7s++Sim0Y4/JK2mSYfKK1QtDoZOtwKU0yWP6mpsU0jvYvJmKaT/xbvfA0JcFXN5PLqch2kv55kt2kryaKfeTtp88QhbWc+c9yNdeMru7nwBoS+90gQfZ6iAaTzsrMUTmosBOzPn8/7P8+EKWH5aA7y8gysublf+s/GflP/+QuRDLO5r3oTB8r28/vgaFRgjy6SfnX/31AZHKZ7/xvkZt3K/RGv9rlGYDqrzZgSprtqDSzR5UqtmEGm52oQrNMpTfa2u/YzHrUH+72P4NNjV2FYLM4pYVBzwD/Ux+AiRKIXJeoiRL8gSIUeLnjGQL6P1lF+jJGXQzT/Hz/BH1OZY//uZDJxnEz3NeN+f1WdmNOrXdRHMr1RihFWVhgD8BVHkmoIJN/viHcnNhhNbuRr0y7kThKVHKT4D1Mo2YhFroBz/ZkCixkt1Uw++iMcCf0JlIJEmy+0D83E/jb+QkwbkrYwARyE+6mdAFSCRJxGOf4+fZfU5SPOyELtCSInzDmbp7EvD38U/PRyrjXuiyqYaUZwDoB8d1w4dNghB0kpwX/D4jnpKPbAFAbwQkmlZi1NQ9gZ2Y8+nKLLUFLgy7h1oGFnmkxfUOZRsVD4FUg5gOmGrIkuwCYpREUwGYrmVG2UbFE+pzrHi67UMnGSWalXGnMu6poTNdy4wSCWhqta0wZLDDln+oGhZM1zKjbKPgx9NGnYZMEvq2tgUg1VAApmuZEbZR6EwkkiTVAyDRFGL3FIDpWmZS26hDIkkiHruVaFYPVIDpWmaEbTR1tyvgZ66MOwrAdC0zyjYKjusQn7ZBCDpJZRz8PiPeKCkAE7XMrMQQmXsCxc/5XFlgmTHsHmoZUPNIi/sSc7PMtIa5WWZaw9AsM90tmJtlpjXMzTLTGsZmmekNc7PMtIa5WWZaQ9+WmZUYInNPYCxzPh3vlhnD7qGWAdMYaXFfojvLzNDQnWVmaGjNMjO3Bd1ZZoaG7iwzQ0NzlpmpoTvLzNDQnWVmaKjOMrMSQ2TuCQx8zqcT2zJj2D3UMmDOIy3uS9RgmbEDNVhm7EABlhlHFtRgmbEDNVhm7EAJlhk/UINlxg7UYJmxg8WwzKzEEJl7AlbO+XQIW2YMu4diJQszruK+ZL6WGRMhngpI+GELYL6WGRMhngrIc6IkPKQFzNEy4+bCAH+e1ss5r+szX8uMlTwlSs+Jksh8LTNOEpw75wEImKtlxkVkTwUkWD1fy4yP5Lw++ShAMF/LjIkQTwVkAMTPrcSoqXsCOzHn04FZYg==" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kfold-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 2: 5-fold CV
+</figcaption>
+</figure>
+</div>
+<p><span class="math display">\[
+CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} \text{Measuer of Errori}_i \tag{5}
+\]</span></p>
+</section>
+<section id="nested-cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="nested-cross-validation">Nested Cross-Validation</h3>
+<p>Nested Cross-Validation is especially helpful when choosing a model and adjusting hyperparameters. Two stages of cross-validation are used in this technique: an inner loop that optimizes hyperparameters and an outside loop that assesses the model’s performance. Nested cross-validation offers a more objective estimation of the model’s capacity for generalization by isolating the hyperparameter tweaking procedure from the performance assessment. According to Filzmoser and his colleagues, nested cross-validation is useful for generating precise performance estimates without causing overfitting, which can happen when hyperparameters are adjusted using the same data that is used for model evaluation <span class="citation" data-cites="filzmoser2009repeated">(<a href="#ref-filzmoser2009repeated" role="doc-biblioref">Filzmoser, Liebmann, and Varmuza 2009</a>)</span>. This technique is particularly important in complicated modeling situations when the model’s prediction performance is greatly impacted by parameter adjustment.</p>
+<div id="fig-NestCV" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-NestCV-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data:image/webp;base64,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" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NestCV-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3: Nested CV
+</figcaption>
+</figure>
+</div>
 <section id="square-error" class="level5">
 <h5 class="anchored" data-anchor-id="square-error">Square Error</h5>
 <p><span class="math display">\[
@@ -3210,11 +3305,12 @@ h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2}\ta
 CV_{(n)}=\frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}}{1-h_i}\right)^2\tag{3}
 \]</span></p>
 </section>
-<section id="k-fold-cross-validation" class="level4">
-<h4 class="anchored" data-anchor-id="k-fold-cross-validation">k-Fold Cross-Validation</h4>
+<section id="k-fold-cross-validation-1" class="level4">
+<h4 class="anchored" data-anchor-id="k-fold-cross-validation-1">k-Fold Cross-Validation</h4>
 <p><span class="math display">\[
 CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} MSEi
 \]</span></p>
+</section>
 </section>
 </section>
 <section id="analysis-and-results" class="level2">

@@ -90,6 +90,8 @@ $$
 
 A specific case of K-Fold Cross-Validation, where k is the number of data points in the dataset, is Leave-One-Out Cross-Validation (LOOCV). With this approach, the model is trained N times, with the remaining N−1 observations being used for training and one observation being left out as the test set each time. Even with its high computing cost, LOOCV offers an objective assessment of the model's efficacy. Lei talks about how LOOCV is good at giving a thorough evaluation of model performance, particularly for small datasets [@lei2020cross]. However, as Browne points out, a drawback may be the huge variance in error estimation brought on by the frequent usage of almost identical training sets [@browne2000cross].
 
+The steps for LOOCV are almost identical to k-fold cross validation.  The only difference is that in k-fold, k must be less than the number of observations (N).  In LOOCV, k = N, so when you split the data into testing and training data, the first testing fold is one of the observations and the training data would be every other observation.  In this way, every observation is tested against every other observation and the process would be repeated N times.
+
 ![Leave One Out CV](LOOCV_fig.webp){#fig-LOOCV}
 
 $$
@@ -100,6 +102,25 @@ $$
 
 K-Fold Cross-Validation is a widely used technique for assessing the performance of a predictive model. The dataset is divided using this method into k roughly equal-sized folds. After k−1folds of training, the model is tested on the last fold. Every fold is used as the test set once, and this process is repeated k times. Next, an average of the outcomes is obtained to generate a single performance estimate. Wong and Yeh state that this approach is a strong option for model validation since it yields accurate estimates and is particularly useful for smaller datasets for which separate training and testing sets are impractical [@wong2019reliable]. Additionally, Browne highlights the significance of K-Fold CV in empirical model evaluation and elaborates on the flexibility and adaptability of the model in handling various data distributions and sizes [@browne2000cross]. 
 
+The steps for k-fold Cross Validation are as follows and were adapted from Song QC, Tang C, Wee S. Making Sense of Model Generalizability: A Tutorial on Cross-Validation in R and Shiny. Advances in Methods and Practices in Psychological Science. 2021;4(1). doi:10.1177/2515245920947067
+
+1. Prepare the data.  
+To do this, you take all the observations and randomly shuffle them.  Once it has been shuffled, if N = all of the observations and k is the number of folds you want to use, then you would assign the observations into folds that are roughly N/k large.  When placing the observations into the folds, you would do so without replacement so each observation would be in 1 and only 1 fold.  For example,  If you wanted k=10 folds and you had 200 observations, each fold would be 200/10 = 20 large.  If you were using 201 observations, then one of the folds would have 21, the rest would have 20.  
+
+2. Split the folds into training sets and a test set.  
+In the previous example, if you had 10 folds, we could choose the first set to be the test set and the other 9 would be the training set.  It doesn’t make a difference which one you choose as all of the folds will eventually be test folds against the other 9.
+
+3. Fit model to the training data.
+Take the model you are going to use for prediction and fit it to the training data.  Continuing the example, you would use the 9 training folds to fit the model.
+Take the fitted model you developed in step 3 and apply it to the 1 test fold.  After applying it to the model, you would take the resulting prediction and determine the accuracy by comparing what was predicted from the training folds to the actual values from the test fold.
+
+4. Repeat steps 2 - 4.  
+In the example, if you were using k=10, then you would pick one of the folds you have not previously used and make it the test fold and the other 9 the training fold.  In this way, every observation will be a member of the test fold once and training folds 9 times.
+
+5. Take accuracies
+After each fold has been used as the test fold, take all the accuracies determined from step 4 and come up with an average accuracy for the data set.
+
+
 ![5-fold CV](CV5Fold_fig.webp){#fig-kfold}
 
 $$
@@ -109,6 +130,21 @@ $$
 ### Nested Cross-Validation
 
 Nested Cross-Validation is especially helpful when choosing a model and adjusting hyperparameters. Two stages of cross-validation are used in this technique: an inner loop that optimizes hyperparameters and an outside loop that assesses the model's performance. Nested cross-validation offers a more objective estimation of the model's capacity for generalization by isolating the hyperparameter tweaking procedure from the performance assessment. According to Filzmoser and his colleagues, nested cross-validation is useful for generating precise performance estimates without causing overfitting, which can happen when hyperparameters are adjusted using the same data that is used for model evaluation [@filzmoser2009repeated]. This technique is particularly important in complicated modeling situations when the model's prediction performance is greatly impacted by parameter adjustment.
+
+1. As in k-fold cross-validation, break the observations into the single test fold and the training folds.
+
+2. The training fold becomes the outer loop, the testing fold is the inner loop.
+
+3. Split the inner loop into training sets and validation sets.  In a 5 * 2 split, where 5 is the number of folds, the inner loop is broken into 2 training sets and 2 validation sets.
+
+4. After validating the inner loop by fitting it to the model, the training set and the validation set are reversed and the inner loop is checked again.
+
+5. During the inner loop validation process, the hyperparameters are tested.  The number of hyperparameters that produces the highest average accuracy is chosen for that fold.
+
+6. Take the hyperparameter accuracy for each fold and find the average of all folds which will give us the average accuracy of the model [@berrar2019cross].
+
+7. Repeat the process k-times, this time choosing a new test fold.
+
 
 ![Nested CV](NestCV_fig.webp){#fig-NestCV}
 
